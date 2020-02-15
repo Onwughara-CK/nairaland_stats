@@ -12,7 +12,7 @@ class NairalandFtcSpider(scrapy.Spider):
         fp_links = response.css('.featured.w a')
 
         for fp_link in fp_links:
-            topic = re.sub('<[^<>]+>', '', fp_link.get())
+            #topic = re.sub('<[^<>]+>', '', fp_link.get())
             link = fp_link.xpath('.//@href').get()
             yield response.follow(url=link, callback=self.parse_ftc)
 
@@ -24,10 +24,19 @@ class NairalandFtcSpider(scrapy.Spider):
             '//table[@summary=\'posts\']/tr/td/a[@class="user"]')[0:2]
         op = rows.xpath('.//text()')[0].get()
         ftc = rows.xpath('.//text()')[1].get()
-        print(
-            '---------------------\n',
-            f'Topic : {topic}\n',
-            f'OP : {op}\n',
-            f'First to comment : {ftc}\n',
-            f'URL : {response.url}\n',
-            '---------------------\n')
+
+        with open('nairaStats.txt', 'a') as f:
+            f.write(
+                '---------------------\n'
+                f'Topic : {topic}\n'
+                f'OP : {op}\n'
+                f'First to comment : {ftc}\n'
+                f'URL : {response.url}\n'
+                '---------------------\n')
+        # print(
+        #    '---------------------\n',
+        #    f'Topic : {topic}\n',
+        #    f'OP : {op}\n',
+        #    f'First to comment : {ftc}\n',
+        #    f'URL : {response.url}\n',
+        #    '---------------------\n')
