@@ -11,13 +11,11 @@ class NairalandFtcSpider(scrapy.Spider):
     def parse(self, response):
         fp_links = response.css('.featured.w a')
 
-        for fp_link in fp_links:
-            #topic = re.sub('<[^<>]+>', '', fp_link.get())
+        for fp_link in fp_links:            
             link = fp_link.xpath('.//@href').get()
             yield response.follow(url=link, callback=self.parse_ftc)
 
     def parse_ftc(self, response):
-
         topic = response.xpath(
             '//table[@summary=\'posts\']/tr/td/a[4]/text()').get()
         rows = response.xpath(
